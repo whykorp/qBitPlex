@@ -1,7 +1,7 @@
 // popup.js – qBitPlex
 
 // URL de ton serveur Flask
-const SERVER_URL = "http://localhost:3000/add";
+const SERVER_URL = "http://128.78.3.237:3000/add";
 
 // Récupération de l'URL du torrent depuis la query string
 const params = new URLSearchParams(window.location.search);
