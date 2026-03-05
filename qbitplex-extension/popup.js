@@ -1,46 +1,45 @@
-// popup.js – qBitPlex
-
+// Récupération des infos depuis l'URL de la popup
 const params = new URLSearchParams(window.location.search);
-const magnetLink = params.get("url");
+const torrentUrl = params.get("url");
 const torrentName = params.get("name") || "Nom inconnu";
 
-console.log("Torrent reçu :", torrentName, magnetLink);
-
-// Affiche le nom du torrent dans la popup
-const title = document.createElement("h3");
-title.innerText = torrentName;
-title.style.fontWeight = "bold";
-title.style.marginBottom = "10px";
-document.body.prepend(title);
+document.getElementById("torrentName").innerText = torrentName;
 
 const category = document.getElementById("category");
 const customPath = document.getElementById("customPath");
 
+// Affiche ou cache le champ texte si "Autre"
 category.addEventListener("change", () => {
-    if (category.value === "other") {
-        customPath.style.display = "block";
-    } else {
-        customPath.style.display = "none";
-    }
+    customPath.style.display = category.value === "other" ? "block" : "none";
 });
 
+// Mapping catégorie → chemin serveur
+function getServerPath(fileType) {
+    if (fileType === "Films" || fileType === "Film") return "Z:/";
+    if (fileType === "Séries" || fileType === "Série") return "S:/";
+    if (fileType === "Anime" || fileType === "Animes") return "A:/";
+    if (["Concert", "Concerts", "Live", "Lives"].includes(fileType)) return "L:/Concerts/";
+    if (["Emission", "Documentaire", "Docs", "Emissions", "Documentaires"].includes(fileType)) return "L:/Emission & Docs/";
+    if (fileType === "Spectacle" || fileType === "Spectacles") return "L:/Spectacles/";
+    return fileType; // si "Autre", on renvoie directement le texte saisi
+}
+
+// Quand l'utilisateur clique sur "Envoyer"
 document.getElementById("send").onclick = async () => {
-    const path = category.value === "other"
-        ? document.getElementById("path").value
-        : category.value;
+    let selected = category.value === "other" ? document.getElementById("path").value : category.value;
+    const filePath = getServerPath(selected);
 
     try {
         const response = await fetch("http://128.78.3.237:3000/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: magnetLink, name: torrentName, path: path })
+            body: JSON.stringify({ url: torrentUrl, path: filePath })
         });
 
-        console.log("Status :", response.status);
+        console.log("Status:", response.status);
         const data = await response.json();
-        console.log("Réponse serveur :", data);
-
-        alert(`Torrent envoyé !\n${torrentName}`);
+        console.log("Réponse du serveur :", data);
+        alert("Torrent envoyé au serveur !");
         window.close();
     } catch (err) {
         console.error("Erreur fetch :", err);

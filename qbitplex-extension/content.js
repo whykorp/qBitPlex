@@ -1,47 +1,27 @@
 function addQBitPlexButton() {
-    // Cherche la div qui contient déjà les boutons (Télécharger, Favoris, etc.)
-    const buttonContainer = document.querySelector(
-        "div.flex.items-center.gap-2.overflow-x-auto.pb-2.lg\\:pb-0.-mx-4.px-4.lg\\:mx-0.lg\\:px-0.lg\\:flex-wrap.lg\\:justify-end"
-    );
-
-    if (!buttonContainer) return console.warn("qBitPlex : container non trouvé !");
-
-    const wrapper = document.createElement("div");
-    wrapper.style.flexShrink = "0";   // <- important pour overflow-x-auto
-    wrapper.style.marginLeft = "6px"; // espace entre les boutons
-
     const btn = document.createElement("button");
-    btn.type = "button";
     btn.innerText = "Send to qBitPlex";
-    btn.className =
-        "rounded-md font-medium inline-flex items-center px-2.5 py-1.5 text-sm gap-1.5 text-inverted bg-primary hover:bg-primary/75 active:bg-primary/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-    wrapper.appendChild(btn);
-    buttonContainer.appendChild(wrapper);
-    // Ajoute un petit icon à gauche (optionnel)
-    const icon = document.createElement("span");
-    icon.className = "iconify i-heroicons:arrow-down-tray shrink-0 size-5";
-    icon.setAttribute("aria-hidden", "true");
-    btn.prepend(icon);
+    // style simple fixé en bas à droite
+    btn.style.position = "fixed";
+    btn.style.bottom = "20px";
+    btn.style.right = "20px";
+    btn.style.zIndex = "9999";
+    btn.style.padding = "10px 15px";
+    btn.style.borderRadius = "6px";
+    btn.style.border = "none";
+    btn.style.backgroundColor = "#00d1b2";
+    btn.style.color = "#1e1e2f";
+    btn.style.fontWeight = "bold";
+    btn.style.cursor = "pointer";
+    btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
 
     btn.onclick = () => {
-        // Récupère hash depuis l'URL
-        let magnetLink = "";
         const match = window.location.href.match(/\/torrents\/([a-f0-9]{40})/i);
-        if (match) {
-            const hash = match[1];
-            magnetLink = `magnet:?xt=urn:btih:${hash}&dn=torrent`;
-        } else {
-            const magnetElement = document.querySelector("a[href^='magnet:?xt=urn:btih:']");
-            magnetLink = magnetElement ? magnetElement.href : window.location.href;
-        }
+        const hash = match ? match[1] : null;
+        const magnetLink = hash ? `magnet:?xt=urn:btih:${hash}&dn=torrent` : window.location.href;
+        const torrentName = document.querySelector("h1.text-xl")?.innerText.trim() || "Nom inconnu";
 
-        // Récupère le nom du torrent
-        let torrentName = "Nom inconnu";
-        const h1 = document.querySelector("h1.text-xl, h1.font-bold");
-        if (h1) torrentName = h1.innerText.trim();
-
-        // Envoie au background pour ouvrir la popup
         chrome.runtime.sendMessage({
             action: "openPopup",
             url: magnetLink,
@@ -49,9 +29,12 @@ function addQBitPlexButton() {
         });
     };
 
-    // On ajoute le bouton à la fin de la div
-    buttonContainer.appendChild(btn);
+    document.body.appendChild(btn);
 }
 
-// Lancement
+// Récupère hash + nom pour debug
+const match = window.location.href.match(/\/torrents\/([a-f0-9]{40})/i);
+console.log("Hash du torrent :", match ? match[1] : "non trouvé");
+console.log("Nom du torrent :", document.querySelector("h1.text-xl")?.innerText.trim() || "non trouvé");
+
 addQBitPlexButton();
