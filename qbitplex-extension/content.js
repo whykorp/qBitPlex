@@ -19,8 +19,12 @@ function addQBitPlexButton() {
     btn.onclick = () => {
         const match = window.location.href.match(/\/torrents\/([a-f0-9]{40})/i);
         const hash = match ? match[1] : null;
-        const magnetLink = hash ? `magnet:?xt=urn:btih:${hash}&dn=torrent` : window.location.href;
         const torrentName = document.querySelector("h1.text-xl")?.innerText.trim() || "Nom inconnu";
+
+        // Magnet complet avec nom du torrent
+        const magnetLink = hash 
+            ? `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(torrentName)}`
+            : window.location.href;
 
         chrome.runtime.sendMessage({
             action: "openPopup",
