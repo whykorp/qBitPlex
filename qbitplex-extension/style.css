@@ -1,0 +1,62 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1e1e2f;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.popup-container {
+    padding: 20px;
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+h2#torrentName {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00d1b2;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+select, input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #2a2a3d;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#customPath {
+    display: none;
+}
+
+button#send {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #00d1b2;
+    color: #1e1e2f;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button#send:hover {
+    background-color: #00b38f;
+}
+
+button#send:active {
+    background-color: #009c75;
+}

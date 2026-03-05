@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
+<title>qBitPlex</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="popup-container">
+    <h2 id="torrentName">Torrent</h2>
 
-<h2>qBitPlex</h2>
+    <label for="category">Catégorie :</label>
+    <select id="category">
+        <option value="Films">Films</option>
+        <option value="Séries">Séries</option>
+        <option value="Anime">Anime</option>
+        <option value="other">Autre</option>
+    </select>
 
-<label>Catégorie :</label>
+    <div id="customPath">
+        <input type="text" id="path" placeholder="Chemin personnalisé...">
+    </div>
 
-<select id="category">
-  <option value="movies">Films</option>
-  <option value="series">Séries</option>
-  <option value="anime">Anime</option>
-  <option value="other">Autre</option>
-</select>
-
-<div id="customPath" style="display:none;">
-  <input type="text" id="path" placeholder="/downloads/mon_dossier">
+    <button id="send">Envoyer</button>
 </div>
 
-<button id="send">Envoyer</button>
-
 <script src="popup.js"></script>
-
 </body>
 </html>

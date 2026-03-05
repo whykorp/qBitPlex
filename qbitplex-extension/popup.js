@@ -1,18 +1,21 @@
 // popup.js – qBitPlex
 
-// URL de ton serveur Flask
-const SERVER_URL = "http://128.78.3.237:3000/add";
-
-// Récupération de l'URL du torrent depuis la query string
 const params = new URLSearchParams(window.location.search);
-const torrentUrl = params.get("url") || ""; // fallback si vide
+const magnetLink = params.get("url");
+const torrentName = params.get("name") || "Nom inconnu";
 
-// Éléments du DOM
+console.log("Torrent reçu :", torrentName, magnetLink);
+
+// Affiche le nom du torrent dans la popup
+const title = document.createElement("h3");
+title.innerText = torrentName;
+title.style.fontWeight = "bold";
+title.style.marginBottom = "10px";
+document.body.prepend(title);
+
 const category = document.getElementById("category");
 const customPath = document.getElementById("customPath");
-const sendBtn = document.getElementById("send");
 
-// Affiche le champ custom si catégorie = "Autre"
 category.addEventListener("change", () => {
     if (category.value === "other") {
         customPath.style.display = "block";
@@ -21,47 +24,26 @@ category.addEventListener("change", () => {
     }
 });
 
-// Fonction principale à l'envoi
-sendBtn.onclick = async () => {
-    if (!torrentUrl) {
-        alert("URL du torrent introuvable !");
-        return;
-    }
-
-    // Déterminer le chemin à envoyer
+document.getElementById("send").onclick = async () => {
     const path = category.value === "other"
-        ? document.getElementById("path").value.trim()
+        ? document.getElementById("path").value
         : category.value;
 
-    if (!path) {
-        alert("Tu dois renseigner un chemin pour la catégorie 'Autre'.");
-        return;
-    }
-
     try {
-        const response = await fetch(SERVER_URL, {
+        const response = await fetch("http://128.78.3.237:3000/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: torrentUrl, path: path })
+            body: JSON.stringify({ url: magnetLink, name: torrentName, path: path })
         });
 
-        if (!response.ok) {
-            console.error("Erreur HTTP:", response.status);
-            alert("Erreur serveur : " + response.status);
-            return;
-        }
-
+        console.log("Status :", response.status);
         const data = await response.json();
         console.log("Réponse serveur :", data);
 
-        // Affiche le message du serveur
-        alert(data.message);
-
-        // Fermer la popup
+        alert(`Torrent envoyé !\n${torrentName}`);
         window.close();
-
     } catch (err) {
         console.error("Erreur fetch :", err);
-        alert("Impossible de contacter le serveur. Vérifie qu'il est lancé et que CORS est activé.");
+        alert("Erreur lors de l'envoi du torrent !");
     }
 };
