@@ -21,9 +21,9 @@ function addQBitPlexButton() {
         const hash = match ? match[1] : null;
         const torrentName = document.querySelector("h1.text-xl")?.innerText.trim() || "Nom inconnu";
 
-        // Magnet complet avec nom du torrent
-        const magnetLink = hash 
-            ? `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(torrentName)}`
+        // Magnet complet avec nom et tracker
+        const magnetLink = hash
+            ? `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(torrentName)}&tr=${encodeURIComponent("https://c411.org/announce/3929c0d1e7b75aa278ce90f1ebb5274e")}`
             : window.location.href;
 
         chrome.runtime.sendMessage({
