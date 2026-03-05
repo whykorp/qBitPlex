@@ -33,7 +33,7 @@ document.getElementById("send").onclick = async () => {
         const response = await fetch("http://128.78.3.237:3000/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: torrentUrl, path: filePath })
+            body: JSON.stringify({ url: torrentUrl, path: filePath, name: torrentName })
         });
 
         console.log("Status:", response.status);
