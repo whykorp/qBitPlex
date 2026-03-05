@@ -4,17 +4,20 @@ function addQBitPlexButton() {
         "div.flex.items-center.gap-2.overflow-x-auto.pb-2.lg\\:pb-0.-mx-4.px-4.lg\\:mx-0.lg\\:px-0.lg\\:flex-wrap.lg\\:justify-end"
     );
 
-    if (!buttonContainer) {
-        console.warn("qBitPlex : container des boutons non trouvé !");
-        return;
-    }
+    if (!buttonContainer) return console.warn("qBitPlex : container non trouvé !");
+
+    const wrapper = document.createElement("div");
+    wrapper.style.flexShrink = "0";   // <- important pour overflow-x-auto
+    wrapper.style.marginLeft = "6px"; // espace entre les boutons
 
     const btn = document.createElement("button");
     btn.type = "button";
     btn.innerText = "Send to qBitPlex";
     btn.className =
-        "rounded-md font-medium inline-flex items-center px-2.5 py-1.5 text-sm gap-1.5 text-inverted bg-primary hover:bg-primary/75 active:bg-primary/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary shrink-0";
+        "rounded-md font-medium inline-flex items-center px-2.5 py-1.5 text-sm gap-1.5 text-inverted bg-primary hover:bg-primary/75 active:bg-primary/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
+    wrapper.appendChild(btn);
+    buttonContainer.appendChild(wrapper);
     // Ajoute un petit icon à gauche (optionnel)
     const icon = document.createElement("span");
     icon.className = "iconify i-heroicons:arrow-down-tray shrink-0 size-5";
